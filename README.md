@@ -237,33 +237,25 @@ GET http://127.0.0.1:5000/predict-sample
 
 ### Menggunakan PowerShell:
 ```powershell
-# Health check
 Invoke-WebRequest -Uri "http://127.0.0.1:5000/health" | Select-Object -Expand Content
 
-# Sample prediction
 Invoke-WebRequest -Uri "http://127.0.0.1:5000/predict-sample" | Select-Object -Expand Content
 
-# Predict dengan JSON body - Pasien Sehat
 $body = Get-Content "sample_request.json" -Raw
 Invoke-RestMethod -Uri "http://127.0.0.1:5000/predict" -Method POST -Body $body -ContentType "application/json"
 
-# Predict dengan JSON body - Pasien Berisiko Tinggi
 $body = Get-Content "sample_request_risiko_tinggi.json" -Raw
 Invoke-RestMethod -Uri "http://127.0.0.1:5000/predict" -Method POST -Body $body -ContentType "application/json"
 ```
 
 ### Menggunakan curl:
 ```bash
-# Health check
 curl http://127.0.0.1:5000/health
 
-# Sample prediction
 curl http://127.0.0.1:5000/predict-sample
 
-# Predict dengan JSON body - Pasien Sehat
 curl -X POST http://127.0.0.1:5000/predict -H "Content-Type: application/json" -d @sample_request.json
 
-# Predict dengan JSON body - Pasien Berisiko Tinggi
 curl -X POST http://127.0.0.1:5000/predict -H "Content-Type: application/json" -d @sample_request_risiko_tinggi.json
 ```
 
