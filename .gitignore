@@ -1,8 +1,8 @@
 # Specific notebook to hide
 alzheimersXegear.ipynb
 
-# Model files
-*.pkl
+# Model files (uncomment line below to hide .pkl files from GitHub)
+# *.pkl
 *.h5
 *.joblib
 *.pth

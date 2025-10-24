@@ -2,16 +2,23 @@ from flask import Flask, request, jsonify
 import pickle
 import pandas as pd
 import numpy as np
+import os
 
 app = Flask(__name__)
 
+# Load model and scaler
 print("Loading model and scaler...")
-with open('alzheimer_model.pkl', 'rb') as f:
-    model = pickle.load(f)
-
-with open('alzheimer_scaler.pkl', 'rb') as f:
-    scaler = pickle.load(f)
-print("Model and scaler loaded successfully!")
+try:
+    with open('alzheimer_model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    
+    with open('alzheimer_scaler.pkl', 'rb') as f:
+        scaler = pickle.load(f)
+    print("Model and scaler loaded successfully!")
+except Exception as e:
+    print(f"Error loading model: {e}")
+    model = None
+    scaler = None
 
 
 @app.route('/', methods=['GET'])
@@ -191,10 +198,12 @@ def predict_sample():
 
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 7860))
+    
     print("\n" + "="*70)
-    print("🚀 ALZHEIMER PREDICTION API")
+    print("ALZHEIMER PREDICTION API")
     print("="*70)
-    print("Server running on: http://127.0.0.1:5000")
+    print(f"Server running on: http://0.0.0.0:{port}")
     print("\nAvailable endpoints:")
     print("  GET  /                 - API information")
     print("  GET  /health           - Health check")
@@ -202,4 +211,6 @@ if __name__ == '__main__':
     print("  GET  /predict-sample   - Predict with sample data")
     print("="*70 + "\n")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use debug=False for production
+    debug_mode = os.environ.get('FLASK_ENV') != 'production'
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
