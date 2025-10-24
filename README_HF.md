@@ -1,6 +1,5 @@
 ---
 title: Alzheimer Prediction API
-emoji: 🧠
 colorFrom: blue
 colorTo: purple
 sdk: docker

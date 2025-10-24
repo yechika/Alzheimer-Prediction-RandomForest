@@ -6,7 +6,6 @@ import os
 
 app = Flask(__name__)
 
-# Load model and scaler
 print("Loading model and scaler...")
 try:
     with open('alzheimer_model.pkl', 'rb') as f:
@@ -61,7 +60,6 @@ def predict():
     Body: {"Age": 75, "Gender": 1, "Ethnicity": 0, ...}
     """
     try:
-        # Ambil data dari JSON body
         data_json = request.get_json()
         
         if not data_json:
@@ -81,7 +79,6 @@ def predict():
             'DifficultyCompletingTasks', 'Forgetfulness'
         ]
         
-        # Validasi: cek apakah semua field ada
         missing_params = [f for f in required_features if f not in data_json]
         if missing_params:
             return jsonify({
@@ -90,7 +87,6 @@ def predict():
                 'required_fields': required_features
             }), 400
         
-        # Buat dataframe dari JSON data
         data = pd.DataFrame({feature: [float(data_json[feature])] for feature in required_features})
         
         data_scaled = scaler.transform(data)
@@ -211,6 +207,5 @@ if __name__ == '__main__':
     print("  GET  /predict-sample   - Predict with sample data")
     print("="*70 + "\n")
     
-    # Use debug=False for production
     debug_mode = os.environ.get('FLASK_ENV') != 'production'
     app.run(debug=debug_mode, host='0.0.0.0', port=port)
